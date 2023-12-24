@@ -31,7 +31,7 @@
                     <td>{{ $transaction->created_at->format('Y-m-d H:i:s') }}</td>
                 </tr>
 
-                @include("components.transaction", ['transaction' => $transaction])
+                @include("components.transaction-modal", ['transaction' => $transaction])
             @endforeach
         </tbody>
     </table>
@@ -42,4 +42,10 @@
             cursor: pointer;
         }
     </style>
+    <script>
+        Echo.private(`transactions-sync`)
+        .listen('TransactionUpdated', (e) => {
+            console.log(e.transaction);
+        });
+    </script>
 @endsection
