@@ -10,19 +10,19 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class TransactionCreated
+class TransactionCreated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    private $data;
+    private $transaction;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($data)
+    public function __construct($transaction)
     {
         //
-        $this->data = $data;
+        $this->transaction = $transaction;
     }
 
     /**
