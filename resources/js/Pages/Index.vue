@@ -22,7 +22,10 @@
           v-for="transaction in transactions"
           :key="transaction.id"
           class="transaction-row"
-          :class="{ 'new-transaction': isNewTransaction(transaction) }"
+          :class="{
+            'new-transaction': isNewTransaction(transaction),
+            'updated-transaction': isUpdatedTransaction(transaction),
+          }"
           @click="showTransactionModal(transaction)"
         >
           <td>{{ transaction.id }}</td>
@@ -65,6 +68,7 @@ export default {
       showModal: false,
       selectedTransaction: null,
       newTransactionId: null,
+      updatedTransactionId: null,
     };
   },
   methods: {
@@ -84,22 +88,33 @@ export default {
     },
     isNewTransaction(transaction) {
       return this.newTransactionId === transaction.id;
-    }
-
+    },
+    isUpdatedTransaction(transaction) {
+      return this.updatedTransactionId === transaction.id;
+    },
   },
   mounted() {
     Echo.channel("transactions-sync")
-    .listen("TransactionCreated", (data) => {
-      // this.transactions = [data.transaction, ...this.transactions];
-      // Highlight the new row
-      this.newTransactionId = data.transaction.id;
-      setTimeout(() => {
-        this.newTransactionId = null;
-      }, 2000);
+      .listen("TransactionCreated", (data) => {
+        // this.transactions = [data.transaction, ...this.transactions];
+        // Highlight the new row
+        this.newTransactionId = data.transaction.id;
+        setTimeout(() => {
+          this.newTransactionId = null;
+        }, 2000);
 
-      console.log("data.transaction.id", data.transaction.id);
-    })
+        console.log("data.transaction.id", data.transaction.id);
+      })
+      .listen("TransactionUpdated", (data) => {
+        // Highlight the updated row
+        console.log("updated.transaction.id", data.transaction.id);
+        this.updatedTransactionId = data.transaction.id;
+        setTimeout(() => {
+          this.updatedTransactionId = null;
+        }, 2000);
 
+        console.log("updated data.transaction.id", data.transaction.id);
+      });
   },
 };
 </script>
@@ -112,6 +127,11 @@ export default {
 
 .new-transaction {
   background-color: green;
+  animation: fade-out 2s ease-in-out;
+}
+
+.updated-transaction {
+  background-color: yellow;
   animation: fade-out 2s ease-in-out;
 }
 
