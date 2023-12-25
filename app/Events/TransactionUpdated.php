@@ -10,16 +10,19 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class TransactionUpdated
+class TransactionUpdated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    public $transaction;
 
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public function __construct($transaction)
     {
         //
+        $this->transaction = $transaction;
     }
 
     /**
@@ -30,7 +33,7 @@ class TransactionUpdated
     public function broadcastOn(): array
     {
         return [
-            new Channel('transations-sync'),
+            new Channel('transactions-sync'),
         ];
     }
 }
