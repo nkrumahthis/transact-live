@@ -22,6 +22,7 @@
           v-for="transaction in transactions"
           :key="transaction.id"
           class="transaction-row"
+          :class="{ 'new-transaction': isNewTransaction(transaction) }"
           @click="showTransactionModal(transaction)"
         >
           <td>{{ transaction.id }}</td>
@@ -63,6 +64,7 @@ export default {
     return {
       showModal: false,
       selectedTransaction: null,
+      newTransactionId: null,
     };
   },
   methods: {
@@ -80,11 +82,24 @@ export default {
         second: "2-digit",
       });
     },
+    isNewTransaction(transaction) {
+      return this.newTransactionId === transaction.id;
+    }
+
   },
   mounted() {
-    Echo.channel("transactions-sync").listen("TransactionCreated", (data) => {
-      console.log("data.transaction", data.transaction)
-    });
+    Echo.channel("transactions-sync")
+    .listen("TransactionCreated", (data) => {
+      // this.transactions = [data.transaction, ...this.transactions];
+      // Highlight the new row
+      this.newTransactionId = data.transaction.id;
+      setTimeout(() => {
+        this.newTransactionId = null;
+      }, 2000);
+
+      console.log("data.transaction.id", data.transaction.id);
+    })
+
   },
 };
 </script>
@@ -93,5 +108,16 @@ export default {
 .transaction-row:hover {
   background-color: #f5f5f5;
   cursor: pointer;
+}
+
+.new-transaction {
+  background-color: green;
+  animation: fade-out 2s ease-in-out;
+}
+
+@keyframes fade-out {
+  to {
+    background-color: transparent;
+  }
 }
 </style>
