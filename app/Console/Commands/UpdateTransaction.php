@@ -2,7 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Events\TransactionUpdated;
+use App\Models\Transaction;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class UpdateTransaction extends Command
 {
@@ -26,5 +29,7 @@ class UpdateTransaction extends Command
     public function handle()
     {
         //
+        $transaction = Transaction::inRandomOrder()->first();
+        TransactionUpdated::dispatch($transaction);
     }
 }
