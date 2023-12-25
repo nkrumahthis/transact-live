@@ -30,7 +30,7 @@ class TransactionUpdated
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('transations-sync'),
+            new Channel('transations-sync'),
         ];
     }
 }

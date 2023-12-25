@@ -9,12 +9,13 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class TransactionCreated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    private $transaction;
+    public $transaction;
 
     /**
      * Create a new event instance.
@@ -33,7 +34,7 @@ class TransactionCreated implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('transactions-sync'),
+            new Channel('transactions-sync'),
         ];
     }
 }
