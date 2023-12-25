@@ -11,7 +11,9 @@ class IndexController extends Controller
 {
     public function index()
     {
-        $transactions = Transaction::with('fromAccount', 'toAccount')->get();
+        $transactions = Transaction::with('fromAccount', 'toAccount')
+            ->orderBy('created_at', 'desc')
+            ->get();
         return Inertia::render('Index', [
             'transactions' => $transactions,
         ]);
