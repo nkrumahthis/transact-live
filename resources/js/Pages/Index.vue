@@ -67,8 +67,8 @@ export default {
     return {
       showModal: false,
       selectedTransaction: null,
-      newTransactionId: null,
-      updatedTransactionId: null,
+      newTransactionIds: [],
+      updatedTransactionIds: [],
     };
   },
   methods: {
@@ -87,10 +87,10 @@ export default {
       });
     },
     isNewTransaction(transaction) {
-      return this.newTransactionId === transaction.id;
+      return this.newTransactionIds.includes(transaction.id);
     },
     isUpdatedTransaction(transaction) {
-      return this.updatedTransactionId === transaction.id;
+      return this.updatedTransactionIds.includes(transaction.id);
     },
   },
   mounted() {
@@ -98,22 +98,23 @@ export default {
       .listen("TransactionCreated", (data) => {
         // this.transactions = [data.transaction, ...this.transactions];
         // Highlight the new row
-        this.newTransactionId = data.transaction.id;
+        this.newTransactionIds.push(data.transaction.id);
         setTimeout(() => {
-          this.newTransactionId = null;
-        }, 2000);
-
-        console.log("data.transaction.id", data.transaction.id);
+          this.newTransactionIds = newTransactionIds.filter(function (id) {
+            return id !== data.transaction.id;
+          });
+        }, 1500);
       })
       .listen("TransactionUpdated", (data) => {
         // Highlight the updated row
-        console.log("updated.transaction.id", data.transaction.id);
-        this.updatedTransactionId = data.transaction.id;
+        this.updatedTransactionIds.push(data.transaction.id);
         setTimeout(() => {
-          this.updatedTransactionId = null;
-        }, 2000);
-
-        console.log("updated data.transaction.id", data.transaction.id);
+          this.updatedTransactionIds = this.updatedTransactionIds.filter(function (
+            id
+          ) {
+            return id !== data.transaction.id;
+          });
+        }, 1500);
       });
   },
 };
