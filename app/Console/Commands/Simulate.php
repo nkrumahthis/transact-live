@@ -34,14 +34,15 @@ class Simulate extends Command
         while (true) {
             // Update 10 random transactions with intervals
             for ($i = 0; $i < 10; $i++) {
-                $transaction = Transaction::inRandomOrder()->first();
-                TransactionUpdated::dispatch($transaction);
-                // usleep(200000); // Sleep for 100 milliseconds
-                sleep(2);
+                $transaction = Transaction::factory()->create();
+                TransactionCreated::dispatch($transaction);
 
-                // $transaction = Transaction::inRandomOrder()->first();
-                // TransactionCreated::dispatch($transaction);
-                // usleep(100000); // Sleep for 100 milliseconds
+                // Sleep for 1 second
+                sleep(1);
+
+                $transaction = Transaction::all()->random();
+                TransactionUpdated::dispatch($transaction);
+                // sleep(1); // Sleep for 1 second
             }
 
         }
