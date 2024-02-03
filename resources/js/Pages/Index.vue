@@ -100,7 +100,7 @@ export default {
         // Highlight the new row
         this.newTransactionIds.push(data.transaction.id);
         setTimeout(() => {
-          this.newTransactionIds = newTransactionIds.filter(function (id) {
+          this.newTransactionIds = this.newTransactionIds.filter(function (id) {
             return id !== data.transaction.id;
           });
         }, 1500);
@@ -127,12 +127,12 @@ export default {
 }
 
 .new-transaction {
-  background-color: green;
+  background-color: lightgreen;
   animation: fade-out 2s ease-in-out;
 }
 
 .updated-transaction {
-  background-color: yellow;
+  background-color: lightyellow;
   animation: fade-out 2s ease-in-out;
 }
 
