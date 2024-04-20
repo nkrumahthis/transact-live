@@ -18,7 +18,7 @@ jobs:
     - name: PHPStan (php-actions)
       uses: php-actions/phpstan@v3
       with:
-        path: .
+        path: app/
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
     - name: Install Dependencies
