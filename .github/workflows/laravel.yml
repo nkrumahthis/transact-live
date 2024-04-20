@@ -7,18 +7,18 @@ on:
     branches: [ "main" ]
 
 jobs:
-  # static-analysis:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: PHPStan (php-actions)
-  #       uses: php-actions/phpstan@v3
-  laravel-tests:
+
+  build-analyze-test:
     runs-on: ubuntu-latest
     steps:
     - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
       with:
         php-version: '8.2'
     - uses: actions/checkout@v3
+    - name: PHPStan (php-actions)
+      uses: php-actions/phpstan@v3
+      with:
+        path: src/
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
     - name: Install Dependencies
